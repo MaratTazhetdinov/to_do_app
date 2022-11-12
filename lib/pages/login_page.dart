@@ -34,8 +34,8 @@ class LoginPage extends StatelessWidget {
                     CustomButton(
                       text: 'SIGN UP',
                       onPressed: () {
-                        // AutoRouter.of(context).pushNamed('/sign-up-page');
-                        AutoRouter.of(context).replaceNamed('/main-page');
+                        AutoRouter.of(context).pushNamed('/sign-up-page');
+                        // AutoRouter.of(context).replaceNamed('/main-page');
                       },
                       textColor: AppTheme.colors.white,
                       backgroundColor: AppTheme.colors.darkBlue,

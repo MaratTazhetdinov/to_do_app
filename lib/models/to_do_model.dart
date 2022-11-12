@@ -1,25 +1,40 @@
-import 'package:to_do_app/models/project_model.dart';
+import 'dart:ui';
 
-class ToDo {
-  int? id;
-  final String task;
-  DateTime? date;
-  Project? projectType;
+import 'package:intl/intl.dart';
 
-  ToDo({this.id, required this.task, this.date, this.projectType});
+class Todo {
+  int? todoID;
+  String todoTask;
+  DateTime? todoDate;
+  int todoCompletion;
+  int? projectID;
+  String? projectTitle;
+  int? projectColor;
 
-  factory ToDo.fromJson(Map<String, dynamic> json) {
-    return ToDo(
-        id: json['todoID'],
-        task: json['task'],
-        date: json['date'],
-        projectType: json['projectType']);
+  Todo(
+      {this.todoID,
+      required this.todoTask,
+      this.todoDate,
+      this.todoCompletion = 0,
+      this.projectID,
+      this.projectTitle,
+      this.projectColor});
+
+  factory Todo.fromJson(Map<String, dynamic> json) {
+    return Todo(
+        todoID: json['todoID'],
+        todoTask: json['todoTask'],
+        todoDate: DateTime.tryParse(json['todoDate']),
+        todoCompletion: json['todoCompletion'],
+        projectID: json['projectID'],
+        projectTitle: json['projectTitle'],
+        projectColor: json['projectColor']);
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'task': task,
-    'date': date,
-    'projectType': projectType
-  };
+        'todoTask': todoTask,
+        'todoDate': todoDate == null ? null : todoDate!.toString(),
+        'todoCompletion': todoCompletion,
+        'projectID': projectID,
+      };
 }

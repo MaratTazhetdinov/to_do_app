@@ -17,7 +17,7 @@ class SignUpPage extends ConsumerWidget {
     final pageState = ref.watch(signUpPageManagerProvider);
 
     if (pageState is AuthSuccessfulState) {
-      AutoRouter.of(context).pushNamed('/main-page');
+      AutoRouter.of(context).replaceNamed('/main-page');
     }
 
     ref.listen<AuthState>(signUpPageManagerProvider, ((previous, next) {
@@ -63,26 +63,24 @@ class SignUpPage extends ConsumerWidget {
                         label: 'EMAIL'),
                     SizedBox(height: 24),
                     CustomTextField(
-                        onChanged: ref
-                            .read(signUpPageManagerProvider.notifier)
-                            .passwordFieldChanged,
-                        label: 'PASSWORD'),
+                      onChanged: ref
+                          .read(signUpPageManagerProvider.notifier)
+                          .passwordFieldChanged,
+                      label: 'PASSWORD',
+                      obscureText: true,
+                    ),
                   ],
                 )),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    pageState is AuthInitialState
-                        ? CustomButton(
-                            text: 'SIGN UP',
-                            onPressed: () {},
-                            backgroundColor: AppTheme.colors.grey,
-                            textColor: AppTheme.colors.black)
-                        : CustomButton(
-                            text: 'SIGN UP',
-                            onPressed: () {
-                              _authButtonPressed(context, ref);
-                            }),
+                    CustomButton(
+                        text: 'SIGN UP',
+                        onPressed: pageState is AuthEnabledButtonState
+                            ? () {
+                                _authButtonPressed(context, ref);
+                              }
+                            : null),
                     SizedBox(height: 24)
                   ],
                 )

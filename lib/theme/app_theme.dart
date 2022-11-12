@@ -13,6 +13,7 @@ class AppTheme {
         backgroundColor: Color(0xFF1C1C1E),
         appBarTheme: AppBarTheme(color: Color(0xFFFFD60A)),
         fontFamily: 'SF Pro Text Regular',
-        hoverColor: Colors.transparent);
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent);
   }
 }

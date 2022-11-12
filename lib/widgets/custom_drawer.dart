@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_app/theme/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,7 +29,7 @@ class CustomDrawer extends StatelessWidget {
                             text: 'Productivity'),
                         SizedBox(height: 15),
                         DrawerButton(
-                            page: '',
+                            page: '/project-list-page',
                             iconName: 'projects_icon.svg',
                             text: 'Projects'),
                         SizedBox(height: 15),
@@ -64,7 +65,9 @@ class DrawerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-        onPressed: () {},
+        onPressed: () {
+          AutoRouter.of(context).pushNamed('$page');
+        },
         icon: SvgPicture.asset('assets/$iconName'),
         label: Text(
           text,

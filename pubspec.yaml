@@ -39,6 +39,9 @@ dependencies:
   top_snackbar_flutter: ^2.1.1
   path_provider: ^2.0.11
   sqflite: ^2.0.3
+  table_calendar: ^3.0.7
+  intl: ^0.17.0
+  flutter_slidable: ^2.0.0
 
 dev_dependencies:
   auto_route_generator: 

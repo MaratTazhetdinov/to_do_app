@@ -31,32 +31,54 @@ class DatabaseHelper {
 
   Future<void> _onCreateDatabase(Database db, int version) async {
     db.execute(
-        'CREATE TABLE IF NOT EXISTS project(projectID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, color TEXT)'
-        'CREATE TABLE IF NOT EXISTS todo(todoID INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT NOT NULL, date INTEGER, projectID INTEGER, FOREIGN KEY (projectID) REFERENCES project (projectID))');
+        'CREATE TABLE IF NOT EXISTS project(projectID INTEGER PRIMARY KEY AUTOINCREMENT, projectTitle TEXT NOT NULL, projectColor INT NOT NULL, projectCount INTEGER)');
+    db.execute(
+        'CREATE TABLE IF NOT EXISTS todo(todoID INTEGER PRIMARY KEY AUTOINCREMENT, todoTask TEXT NOT NULL, todoDate TEXT, todoCompletion INTEGER NOT NULL, projectID INTEGER, FOREIGN KEY (projectID) REFERENCES project(projectID))');
+    db.execute(
+        'INSERT INTO project (projectTitle, projectColor) VALUES ("Inbox", 0)');
   }
 
-  Future<List<ToDo>> getTodos() async {
+  Future<List<Map<String, Object?>>> getTodos() async {
     final db = await instance._database;
-    final result = await db.rawQuery(
-        'SELECT t.todoID, t.task, t.date, p.title FROM todo t INNER JOIN project p ON p.projectID=t.projectID');
-    return result.map((e) => ToDo.fromJson(e)).toList();
+    return db.rawQuery(
+        'SELECT todo.todoID, todo.todoTask, todo.todoDate, todo.todoCompletion, todo.projectID, project.projectTitle, project.projectColor FROM todo INNER JOIN project ON project.projectID=todo.projectID WHERE todo.todoCompletion!=1');
   }
 
-  Future<List<Project>> getProjects() async {
+  Future<List<Map<String, Object?>>> getProjects() async {
     final db = await instance._database;
-    final result = await db.rawQuery('SELECT * FROM project');
-    return result.map((e) => Project.fromJson(e)).toList();
+    return db.rawQuery(
+        'SELECT p.*, q.projectCount FROM project p LEFT JOIN (SELECT COUNT(*) projectCount, projectID from todo where projectID > 1 and todoCompletion != 1 group by projectID) Q ON p.projectID = q.projectID WHERE p.projectID > 1');
   }
 
-  Future<int> addTodo(ToDo todo) async {
+  Future<int> addTodo(Todo todo) async {
     final db = await instance._database;
-    return db.insert(
-      'todo',
-      {
-        'task': todo.task,
-        'date': todo.date,
-        'projectType': todo.projectType
-      }
-    );
+    return db.rawInsert(
+        'INSERT INTO todo(todoTask, todoDate, todoCompletion, projectID) VALUES ("${todo.todoTask}", "${todo.todoDate}", ${todo.todoCompletion}, ${todo.projectID})');
+  }
+
+  Future<int> addProject(Project project) async {
+    final db = await instance._database;
+    return db.rawInsert(
+        'INSERT INTO project(projectTitle, projectColor) VALUES ("${project.projectTitle}", ${project.projectColor})');
+  }
+
+  Future<int> deleteTodo(int id) async {
+    final db = await instance._database;
+    return db.rawDelete('DELETE FROM todo WHERE todoID=?', [id]);
+  }
+
+  Future<int> deleteProject(int id) async {
+    final db = await instance._database;
+    db.rawDelete('DELETE FROM todo WHERE projectID=?', [id]);
+    return db.rawDelete('DELETE FROM project WHERE projectID=?', [id]);
+  }
+
+  Future<void> changeTodoCompletion(Todo todo) async {
+    final db = await instance._database;
+    db.execute(
+        todo.todoCompletion == 0
+            ? 'UPDATE todo SET todoCompletion=1 WHERE todoID=?'
+            : 'UPDATE todo SET todoCompletion=0 WHERE todoID=?',
+        [todo.todoID]);
   }
 }

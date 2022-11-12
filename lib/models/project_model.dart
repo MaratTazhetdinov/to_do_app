@@ -1,19 +1,23 @@
-import 'package:flutter/material.dart';
-
 class Project {
-  int? id;
-  final String name;
-  final Color color;
+  int? projectID;
+  final String projectTitle;
+  final int projectColor;
+  int? projectCount;
 
-  Project({this.id, required this.name, required this.color});
+  Project(
+      {this.projectID,
+      required this.projectTitle,
+      required this.projectColor,
+      this.projectCount});
 
   factory Project.fromJson(Map<String, dynamic> json) {
-    return Project(id: json['id'], name: json['name'], color: json['color']);
+    return Project(
+        projectID: json['projectID'],
+        projectTitle: json['projectTitle'],
+        projectColor: json['projectColor'],
+        projectCount: json['projectCount'] ?? 0);
   }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'color': color
-  };
+  Map<String, dynamic> toJson() =>
+      {'projectTitle': projectTitle, 'projectColor': projectColor};
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 // ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
@@ -27,10 +28,10 @@ class CustomButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        fixedSize: Size(double.maxFinite, 40),
-        primary: backgroundColor,
-      ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          fixedSize: Size(double.maxFinite, 40),
+          primary: backgroundColor,
+          onSurface: AppTheme.colors.grey),
     );
   }
 }

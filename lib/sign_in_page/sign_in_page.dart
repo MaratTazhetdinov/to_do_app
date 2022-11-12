@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_app/main_page/main_page.dart';
 import 'package:to_do_app/widgets/custom_alert_dialog.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -66,17 +67,13 @@ class SignInPage extends ConsumerWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    pageState is AuthInitialState
-                        ? CustomButton(
-                            text: 'SIGN IN',
-                            onPressed: () {},
-                            backgroundColor: AppTheme.colors.grey,
-                            textColor: AppTheme.colors.black)
-                        : CustomButton(
-                            text: 'SIGN IN',
-                            onPressed: () {
-                              _authButtonPressed(context, ref);
-                            }),
+                    CustomButton(
+                        text: 'SIGN IN',
+                        onPressed: pageState is AuthEnabledButtonState
+                            ? () {
+                                _authButtonPressed(context, ref);
+                              }
+                            : null),
                     SizedBox(height: 24)
                   ],
                 )
